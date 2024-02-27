@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跳转页面</title>
+    <!-- 引入 Bootstrap 样式表 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center">
+        <h2>正在跳转中...</h2>
+        <hr>
+        <p>跳转链接： <strong id="targetUrl"></strong></p>
+    </div>
+
+    <script>
+        // 获取 URL 参数的函数
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        // 在页面加载时执行跳转
+        window.onload = function() {
+            var targetUrl = getUrlParameter('url');
+            if (targetUrl) {
+                document.getElementById('targetUrl').innerText = targetUrl;
+                window.location.href = targetUrl;
+            } else {
+                document.body.innerHTML = "<h2>没有指定跳转链接</h2>";
+            }
+        };
+    </script>
+</body>
+</html>
