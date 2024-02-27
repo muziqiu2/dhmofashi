@@ -6,12 +6,18 @@
     <title>跳转页面</title>
     <!-- 引入 Bootstrap 样式表 -->
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
     <div class="text-center">
         <h2>正在跳转中...</h2>
         <hr>
         <p>跳转链接： <strong id="targetUrl"></strong></p>
+        <p id="warningMessage" class="hidden">请在浏览器中打开链接！</p>
     </div>
 
     <script>
@@ -25,9 +31,19 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
+        // 检测是否在 QQ 或微信中
+        function isQQOrWechat() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            return (userAgent.indexOf('qq') > -1 || userAgent.indexOf('micromessenger') > -1);
+        }
+
         // 在页面加载时执行跳转
         window.onload = function() {
             var targetUrl = getUrlParameter('url');
+            if (isQQOrWechat()) {
+                document.getElementById('warningMessage').classList.remove('hidden');
+                return;
+            }
             if (targetUrl) {
                 document.getElementById('targetUrl').innerText = targetUrl;
                 window.location.href = targetUrl;
