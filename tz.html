@@ -34,16 +34,43 @@
         // 检测是否在 QQ 或微信中
         function isQQOrWechat() {
             var userAgent = navigator.userAgent.toLowerCase();
-            return (userAgent.indexOf('qq') > -1 || userAgent.indexOf('micromessenger') > -1);
+            return userAgent.includes('qq') || userAgent.includes('micromessenger');
+        }
+
+        // 检查Referer是否是自己的网站
+        function isValidReferer() {
+            var referer = document.referrer.toLowerCase();
+            return referer && referer.includes('yourdomain.com');
+        }
+
+        // 验证URL是否有效
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
         }
 
         // 在页面加载时执行跳转
         window.onload = function() {
+            if (!isValidReferer()) {
+                document.body.innerHTML = "<h2>非法请求</h2>";
+                return;
+            }
+
             var targetUrl = getUrlParameter('url');
+            if (!isValidUrl(targetUrl)) {
+                document.body.innerHTML = "<h2>无效的跳转链接</h2>";
+                return;
+            }
+
             if (isQQOrWechat()) {
                 document.getElementById('warningMessage').classList.remove('hidden');
                 return;
             }
+
             if (targetUrl) {
                 document.getElementById('targetUrl').innerText = targetUrl;
                 window.location.href = targetUrl;
