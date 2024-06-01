@@ -40,7 +40,7 @@
         // 检查Referer是否是自己的网站
         function isValidReferer() {
             var referer = document.referrer.toLowerCase();
-            return referer && referer.includes('dh.mofashi.ltd');
+            return referer.includes('dh.mofashi.ltd');
         }
 
         // 验证URL是否有效
@@ -55,7 +55,8 @@
 
         // 在页面加载时执行跳转
         window.onload = function() {
-            if (!isValidReferer()) {
+            var referer = document.referrer.toLowerCase();
+            if (!isValidReferer() || !referer) {
                 document.body.innerHTML = "<h2>非法请求</h2>";
                 return;
             }
